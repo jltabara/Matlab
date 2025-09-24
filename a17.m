@@ -1,47 +1,58 @@
-% Si introducimos más elementos en un polinomio
-% de Taylor el error es menor
+% Tenemos el método trapezoidal
+% El 1 /3 de Simpson
+% También la 3/8 de Simpson
 clc
 
-n = 10;
-a = 1;
-expVal = 1.0;
-currentTerm = 1.0;
+h = 0.9
+a = 0;
+b = a + h;
+trueVal = (b - b^2/2 + b*log(b)) - (a - a^2/2 + b*log(a))
+@(x) 2 / (1 - x) ^ 1.25;
 
-% Calculamos el valor para un n determinado
 
-for i = 1:n
-  currentTerm = currentTerm * (a / i);
-  expVal = expVal + currentTerm;
+% Trapezoidal
+
+I_trap = h/2 *(f(a) + f(b))
+
+errT = abs(trueVal - I_trap)
+
+
+% Simpson 1/3
+
+h = (b - a) / 2
+I_simp = (h/3) * (f(a) + 4 * f(a + h) + f(a + 2 *h))
+errS = abs(trueVal - I_simp)
+
+% Ahora con un número n de intervalos
+% Trapecio
+
+n = 6
+suma = 0
+h = (b - a) / n
+
+for i = 0:(n-1)
+  suma = suma + h/2 * (f(a + i * h) + f(a + (i + 1) * h));
 end
 
-% Con el valor verdadero calculamos el error
+suma
 
-trueVal = exp(a);
-err = abs(trueVal - expVal);
+% Ahora n intervalos con Simpson
+% Me ha salido de chiripa
 
-% Vemos el error con  distintos n
-% A ojo he visto que el error disminuye al
-% aumentar n
+suma = 0
 
-disp(err)
+for i = 0:2:(n-2)
+  suma = suma + h/3 * (f(a + i * h) + 4 * f(a + (i + 1) * h) + f(a + (i + 2) * h));
+end
 
-% El valor de eps en esta versión de octave_core_file_limit
+suma
 
-disp(eps)
 
-% Coincide con 2^-52
+I = quad(f, a, b)
 
-disp(2^-52)
+% 33 minutos
 
-% Los números flotantes se almacenan con mantisa
-% y exponente, ambos en binario
-% En principio se trabaja con 64 bitset
 
-% Si escribimos un número con más cifras que las
-% admitidas entonces Octave redondea al valor
-% más próximo que si puede representar
 
-% No se pueden representar todos los números reales
 
-% 25 minutos
 
